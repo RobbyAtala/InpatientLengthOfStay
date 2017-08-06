@@ -1,6 +1,8 @@
 ---
 title: "Lenght of Stay"
-output: html_document
+output:
+  github_document: default
+  
 ---
 
 ```{r setup, include=FALSE}
