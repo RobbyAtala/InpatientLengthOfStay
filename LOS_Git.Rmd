@@ -21,15 +21,6 @@ knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figs/',
 
 
 
-```{r}
-setwd('/Users/rab/Documents/LosFolderGit')
-library(ggplot2)
-los <- read.csv('rcsvlos.csv')
-hsd.los <- read.csv('HSDlos.csv')
-
-```
-
-
 ### Length of stay for each Physician compared to the Mean of the Team for each month.
 
 The purpose of this quick data exploration is to see if there's a statistically significant difference between the providers when it comes to the length of stay (los) from June 2015 to July 2016.
@@ -40,44 +31,16 @@ For this end, I initially plot the 'los' for each provider side to side with the
 
 Then, I use the ANOVA method to compare the means between the samples. There will be a total of 18 samples each reprensenting one Physician. Each sample has 14 observations corresponding to the mean of the 'los' for each month for each physician from June, 2015 to July, 2016 (14 months total).
 
-The frame below is the source of plotting and analysing the data. I retrieved the data from www.imbills.com and exported it for each month using a csv format.
-
-
-
+The frame below is the source of plotting and analysing the data.
 
 ```{r}
-ano_frame <-subset(los,select=-c(X,index,Okoli.MD..Kelechi.Chima))
-hsd.ano_frame <- subset(hsd.los,select=-c(X,index,Okoli.MD..Kelechi.Chima))
-#hsd.ano_frame
+setwd("/Users/rab/Documents/LosFolderGit")
+library(ggplot2)
+los <- read.csv("data.csv")
+los <- subset(los, select=-c(X,Unnamed..0,L))
+los
+los <- subset(los, select=-index)
 ```
-
-
-
-```{r}
-AJ <- ano_frame$Abou.Jaoude.MD..Dory
-AR <- ano_frame$Atallah..Rabih
-BG <- ano_frame$Bandaru..Gargeyi
-BA <- ano_frame$Barua.MD..Anupa
-BV <- ano_frame$Bhusari..Vaishali
-GS <- ano_frame$Gudur..Suma
-KG <- ano_frame$Khalil.MD..George
-MO <- ano_frame$Moammar..Osauma
-MH <- ano_frame$Muzaffar.MD..Huma
-NS <- ano_frame$Nwerrih.MD..Stella
-OE <- ano_frame$Okeke..Ebere
-OC <- ano_frame$Olisa..Charles
-PM <- ano_frame$Patalay..Madhu
-PS <- ano_frame$Pawar..Sanjeev.M
-RR <- ano_frame$Rao.MD..Rajani
-SR <- ano_frame$Salau.Okeleji.MD..Aderonke
-TS <- ano_frame$Thapa.MD..Shailesh
-ZM <- ano_frame$Zaid..Musaab
-
-combined <- data.frame(AJ, AR, BG, BA, BV, GS, KG, MO, MH, NS, OE, OC, PM, PS, RR, SR, TS, ZM)
-combined
-```
-
-
 
 
 
@@ -85,14 +48,11 @@ combined
 
 ```{r}
 a <-c(1,2,3,4,5,6,7,8,9,10,11,12,13,14)
-
 bind_dates <- data.frame(a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a)
-
 stacked_dates <- stack(bind_dates)
-stacked <- stack(combined)
-all <- data.frame(stacked,stacked_dates)
-all <- subset(all,select=-c(ind.1))
-#all
+stacked.los <- stack(los)
+all <- data.frame(stacked.los,stacked_dates)
+all <- subset(all,select=-ind.1)
 ```
 
 
@@ -119,7 +79,7 @@ ggplot(data=mean_data.mean,aes(values.1,mean_per_month)) + geom_bar(stat='identi
 ## AJ bar chart
 
 ```{r}
-AJ <- combined$AJ
+AJ <- los$AJ
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(AJ,Team)
 stacked_bind.data <-stack(bind.data)
@@ -130,13 +90,12 @@ LoS <- stacked_bind.data$ind
 ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge')+
   scale_x_discrete(labels=c('0','Jun15','Jul','Aug','Sep','Oct','Nov','Dec','Jan16','Feb','Mar','Apr','May','Jun','Jul')) + ylab('los in days') +
   scale_y_continuous(breaks=seq(1,8,0.5))
-df
 ```
 
 ## AR bar chart
 
 ```{r}
-AR <- combined$AR
+AR <- los$AR
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(AR,Team)
 stacked_bind.data <-stack(bind.data)
@@ -153,7 +112,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## BG bar chart
 
 ```{r}
-BG <- combined$BG
+BG <- los$BG
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(BG,Team)
 stacked_bind.data <-stack(bind.data)
@@ -170,7 +129,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## BA bar chart
 
 ```{r}
-BA <- combined$BA
+BA <- los$BA
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(BA,Team)
 stacked_bind.data <-stack(bind.data)
@@ -187,7 +146,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## BV bar chart
 
 ```{r}
-BV <- combined$BV
+BV <- los$BV
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(BV,Team)
 stacked_bind.data <-stack(bind.data)
@@ -204,7 +163,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## GS bar chart
 
 ```{r}
-GS <- combined$GS
+GS <- los$GS
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(GS,Team)
 stacked_bind.data <-stack(bind.data)
@@ -221,7 +180,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## KG bar chart
 
 ```{r}
-KG <- combined$KG
+KG <- los$KG
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(KG,Team)
 stacked_bind.data <-stack(bind.data)
@@ -238,7 +197,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## MO bar chart
 
 ```{r}
-MO <- combined$MO
+MO <- los$MO
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(MO,Team)
 stacked_bind.data <-stack(bind.data)
@@ -254,7 +213,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## MH bar chart
 
 ```{r}
-MH <- combined$MH
+MH <- los$MH
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(MH,Team)
 stacked_bind.data <-stack(bind.data)
@@ -270,7 +229,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## NS bar chart
 
 ```{r}
-NS <- combined$NS
+NS <- los$NS
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(NS,Team)
 stacked_bind.data <-stack(bind.data)
@@ -286,7 +245,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## OE bar chart
 
 ```{r}
-OE <- combined$OE
+OE <- los$OE
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(OE,Team)
 stacked_bind.data <-stack(bind.data)
@@ -302,7 +261,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## OC bar chart
 
 ```{r}
-OC <- combined$OC
+OC <- los$OC
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(OC,Team)
 stacked_bind.data <-stack(bind.data)
@@ -318,7 +277,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## PM bar chart
 
 ```{r}
-PM <- combined$PM
+PM <- los$PM
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(PM,Team)
 stacked_bind.data <-stack(bind.data)
@@ -334,7 +293,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## PS bar chart
 
 ```{r}
-PS <- combined$PS
+PS <- los$PS
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(PS,Team)
 stacked_bind.data <-stack(bind.data)
@@ -350,7 +309,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## RR bar chart
 
 ```{r}
-RR <- combined$RR
+RR <- los$RR
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(RR,Team)
 stacked_bind.data <-stack(bind.data)
@@ -366,7 +325,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## SO bar chart
 
 ```{r}
-SR <- combined$SR
+SR <- los$SR
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(SR,Team)
 stacked_bind.data <-stack(bind.data)
@@ -382,7 +341,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## TS bar chart
 
 ```{r}
-TS <- combined$TS
+TS <- los$TS
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(TS,Team)
 stacked_bind.data <-stack(bind.data)
@@ -400,7 +359,7 @@ ggplot(data=df,aes(m,values,fill=LoS))+geom_bar(stat='identity',position='dodge'
 ## ZM bar chart
 
 ```{r}
-ZM <- combined$ZM
+ZM <- los$ZM
 Team <- mean_data.mean$mean_per_month
 bind.data <- data.frame(ZM,Team)
 stacked_bind.data <-stack(bind.data)
@@ -451,28 +410,8 @@ In our case of 18 samples, we have 153 combinations to compare.
 TukeyHSD identified an overall significant difference between the bottom 8 providers compared with the first 10.
 
 ```{r}
-A.J <- hsd.ano_frame$Abou.Jaoude.MD..Dory
-A.R <- hsd.ano_frame$Atallah..Rabih
-B.G <- hsd.ano_frame$Bandaru..Gargeyi
-B.A <- hsd.ano_frame$Barua.MD..Anupa
-B.V <- hsd.ano_frame$Bhusari..Vaishali
-G.S <- hsd.ano_frame$Gudur..Suma
-K.G <- hsd.ano_frame$Khalil.MD..George
-M.O <- hsd.ano_frame$Moammar..Osauma
-M.H <- hsd.ano_frame$Muzaffar.MD..Huma
-N.S <- hsd.ano_frame$Nwerrih.MD..Stella
-O.E <- hsd.ano_frame$Okeke..Ebere
-O.C <- hsd.ano_frame$Olisa..Charles
-P.M <- hsd.ano_frame$Patalay..Madhu
-P.S <- hsd.ano_frame$Pawar..Sanjeev.M
-R.R <- hsd.ano_frame$Rao.MD..Rajani
-S.R <- hsd.ano_frame$Salau.Okeleji.MD..Aderonke
-T.S <- hsd.ano_frame$Thapa.MD..Shailesh
-Z.M <- hsd.ano_frame$Zaid..Musaab
-
-hsd.combined <- data.frame(A.J, A.R, B.G, B.A, B.V, G.S, K.G, M.O, M.H, N.S, O.E, O.C, P.M, P.S, R.R, S.R, T.S, Z.M)
-hsd.stacked <- stack(hsd.combined)
-anova_results <- aov(values~ind, data=hsd.stacked) #model.tables(anova_results,"means")
+anova_stacked <-stack(los)
+anova_results <- aov(values~ind, data=anova_stacked)
 summary(anova_results)
 ```
 
@@ -481,9 +420,9 @@ After I eliminated providers with length of stay exceeding 5.2, I ran ANOVA agai
 
 
 ```{r}
-hsd.combined <- data.frame(A.J, A.R, B.G, K.G, M.O, N.S, O.E, P.M, R.R, S.R)
-hsd.stacked <- stack(hsd.combined)
-anova_results <- aov(values~ind, data=hsd.stacked) #model.tables(anova_results,"means")
+top10.los <- data.frame(AJ, AR, BG, KG, MO, NS, OE, PM, RR, SR)
+top10.stacked <- stack(top10.los)
+anova_results <- aov(values~ind, data=top10.stacked) #model.tables(anova_results,"means")
 summary(anova_results)
 ```
 
@@ -493,12 +432,14 @@ summary(anova_results)
 Shortfalls of this data analysis:
 
 This data exploration is in no way comprehensive or conclusive.
-In order to run ANOVA, the 'los' variable for each sample should have a normal distribution. I assumed 'los' follows a normal distribution since it's related to human behavior.
+In order to run ANOVA, the 'los' variable for each sample should have a normal distribution. I assumed 'los' follows a normal distribution since it's related to a human behavior.
 In order to run ANOVA, the missing values for providers who were not working on certain months, were replaced by the mean of their 'los' computed from the months when they were working.
 The data might be unfair for some providers like Dr. BA and OC whose 'los' has been improving over the last few months (it is not unusual for someone who newly joined the team to have high 'los' in the first few months).
 The data might be unfair to people who had more float rotations and therefore carried more ICU patients compared to people who had more geographical rotations especially if they had more rotations on the Neurology unit.
 
 I was always suspicious that there's an inter-physician difference in performance and if there is, it could merely be a random observation. This data doesn't prove or disprove that, however it shows that there's a significant difference between a physician with an 'los' of 4.5 and one with an 'los' higher than 6.2; and this particular finding may not be related solely to randomness.
+
+
 
 
 
