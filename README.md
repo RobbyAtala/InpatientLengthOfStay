@@ -4,4 +4,4 @@ optimizing healthcare delivery.
 So "los" is one of the metrics on which some physicians like hospitalists are evaluated these. The lowest the "los" for a particular
 physician is, the better s/he is regarded in terms of performance.
 In this project, I analyse the "los" for several physicians to see if there is a statistically significant difference between the many 
-physicians or not.
+physicians of a particular group or not.
