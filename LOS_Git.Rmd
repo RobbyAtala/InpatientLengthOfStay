@@ -37,7 +37,7 @@ The frame below is the source of plotting and analysing the data.
 setwd("/Users/rab/Documents/LosFolderGit")
 library(ggplot2)
 los <- read.csv("data.csv")
-los <- subset(los, select=-c(X,Unnamed..0,L))
+los <- subset(los, select=-X)
 los
 los <- subset(los, select=-index)
 ```
